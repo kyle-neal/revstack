@@ -91,35 +91,35 @@ defmodule RevstackWeb.WhoamiLive do
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <.summary_item
               icon="hero-cpu-chip"
-              text="Lead Distributed Systems Engineer with 10+ years building production BEAM systems end-to-end"
+              text="Lead Distributed Systems Engineer focused on long-lived, production BEAM systems (Erlang/OTP + Elixir)"
             />
             <.summary_item
               icon="hero-server-stack"
-              text="Sole backend owner of a revenue-critical affiliate platform processing 1.5M+ events/day supporting $2.5M+ monthly revenue"
-            />
-            <.summary_item
-              icon="hero-cog-6-tooth"
-              text="Deep OTP expertise — GenServers, Supervisors, clustering, fault tolerance, BEAM VM tuning, and zero-downtime relup upgrades"
+              text="Builds and operates high-throughput, revenue-critical platforms with a strong performance and operability mindset"
             />
             <.summary_item
               icon="hero-circle-stack"
-              text="Architects and operates a 6-node Cassandra production cluster for high-volume time-series data and backpropagation systems"
+              text="Designs distributed data + messaging architectures across Cassandra/PostgreSQL, RabbitMQ, and search/analytics"
+            />
+            <.summary_item
+              icon="hero-magnifying-glass"
+              text="Owns data modeling and query tuning across OLTP and time-series workloads, with deep comfort debugging production paths"
+            />
+            <.summary_item
+              icon="hero-cog-6-tooth"
+              text="Reliability-first engineering: OTP fault tolerance, BEAM VM tuning, release strategy, CI/CD automation, and incident response"
             />
             <.summary_item
               icon="hero-computer-desktop"
-              text="Full-stack Elixir development — built NetAdmin from inception, a Phoenix + Ash internal infrastructure control platform"
-            />
-            <.summary_item
-              icon="hero-cloud"
-              text="Infrastructure-aware engineer — AWS (EC2, RDS, S3), CI/CD (Jenkins, Ansible), Linux operations"
+              text="Full-stack builder with Phoenix/LiveView and Ash; ships internal platforms and tooling from concept to production"
             />
             <.summary_item
               icon="hero-user-group"
-              text="Leads and manages 4 engineers (UI + infrastructure) while remaining hands-on across backend and full-stack delivery"
+              text="Hands-on technical leader: mentors engineers, aligns cross-team delivery, and stays deep in the code"
             />
             <.summary_item
-              icon="hero-shield-check"
-              text="Production-focused mindset — architecture ownership, data modeling, performance tuning, reliability, and observability"
+              icon="hero-cloud"
+              text="Infrastructure-aware across AWS and Linux, with pragmatic automation experience (Jenkins/Ansible)"
             />
           </div>
         </div>
@@ -184,13 +184,12 @@ defmodule RevstackWeb.WhoamiLive do
               period="October 2014 — Present"
               current?={true}
               items={[
-                "Lead architect and primary backend engineer for a revenue-critical affiliate platform supporting $2.5M+ monthly revenue.",
-                "Process 1.5M+ events daily (~20+ events/sec average) with significantly higher peak throughput.",
-                "Architect and operate a 6-node Cassandra production cluster for high-volume time-series data and backpropagation systems.",
-                "Design distributed messaging pipelines using RabbitMQ and analytics/search infrastructure via Elasticsearch/OpenSearch.",
-                "Sole backend owner across production systems — responsible for architecture, data modeling, performance tuning, and reliability.",
-                "Architected and built NetAdmin from inception — a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation for distributed production environments.",
-                "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend and full-stack delivery."
+                "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
+                "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
+                "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
+                "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
+                "Architected and built NetAdmin from inception — a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+                "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery."
               ]}
             />
 
