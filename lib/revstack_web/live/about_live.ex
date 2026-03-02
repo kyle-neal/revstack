@@ -3,7 +3,7 @@ defmodule RevstackWeb.AboutLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "About — Revstack")}
+    {:ok, assign(socket, page_title: "About — RevenueLink Technologies")}
   end
 
   @impl true
@@ -15,7 +15,7 @@ defmodule RevstackWeb.AboutLive do
           <%!-- Header --%>
           <div class="text-center mb-16">
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-base-content">
-              About <span class="text-primary">Revstack</span>
+              About <span class="text-primary">RevenueLink</span>
             </h1>
             <div class="mt-4 w-16 h-1 bg-primary mx-auto rounded-full"></div>
             <p class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed">

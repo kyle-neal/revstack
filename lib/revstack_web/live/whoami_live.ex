@@ -42,7 +42,7 @@ defmodule RevstackWeb.WhoamiLive do
               navigate={~p"/"}
               class="btn btn-outline btn-lg gap-2 transition-all duration-300 hover:-translate-y-0.5"
             >
-              <.icon name="hero-building-office-2" class="size-5" /> Visit Revstack
+              <.icon name="hero-building-office-2" class="size-5" /> Visit RevenueLink Tech
             </.link>
           </div>
           <%!-- Quick links --%>
@@ -304,7 +304,7 @@ defmodule RevstackWeb.WhoamiLive do
                 Let's build something reliable together.
               </p>
               <.link navigate={~p"/"} class="btn btn-primary gap-2">
-                <.icon name="hero-building-office-2" class="size-4" /> Visit Revstack
+                <.icon name="hero-building-office-2" class="size-4" /> Visit RevenueLink Tech
               </.link>
             </div>
           </div>
