@@ -45,7 +45,7 @@ defmodule RevstackWeb.Layouts do
           >
             RevenueLink Technologies
           </a> --%>
-                    <a
+          <a
             href="/"
             class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
           >
@@ -180,7 +180,10 @@ defmodule RevstackWeb.Layouts do
               LinkedIn
             </a>
             <span class="text-base-content/20">|</span>
-            <a href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com" class="hover:text-base-content transition-colors">
+            <a
+              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              class="hover:text-base-content transition-colors"
+            >
               kyle.neal.lucidsoftwaresolutions@gmail.com
             </a>
           </div>

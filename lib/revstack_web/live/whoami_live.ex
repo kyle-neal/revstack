@@ -62,8 +62,7 @@ defmodule RevstackWeb.WhoamiLive do
               href="mailto:nealkyle5@gmail.com"
               class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
             >
-              <.icon name="hero-envelope" class="size-4" />
-              nealkyle5@gmail.com
+              <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
             </a>
           </div>
         </div>
@@ -252,15 +251,24 @@ defmodule RevstackWeb.WhoamiLive do
             <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <.leadership_item icon="hero-building-office" text="Architecture ownership across all production systems" />
+            <.leadership_item
+              icon="hero-building-office"
+              text="Architecture ownership across all production systems"
+            />
             <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 4 engineers" />
             <.leadership_item
               icon="hero-arrows-right-left"
               text="Coordinating frontend & infrastructure teams"
             />
-            <.leadership_item icon="hero-arrow-trending-up" text="Scaling platforms to $2.5M+ monthly revenue" />
+            <.leadership_item
+              icon="hero-arrow-trending-up"
+              text="Scaling platforms to $2.5M+ monthly revenue"
+            />
             <.leadership_item icon="hero-calendar" text="Managing delivery timelines and releases" />
-            <.leadership_item icon="hero-wrench-screwdriver" text="Hands-on across backend and full-stack delivery" />
+            <.leadership_item
+              icon="hero-wrench-screwdriver"
+              text="Hands-on across backend and full-stack delivery"
+            />
           </div>
         </div>
       </section>
@@ -284,9 +292,9 @@ defmodule RevstackWeb.WhoamiLive do
       <%!-- Closing CTA --%>
       <section class="py-20 sm:py-28">
         <div class="mx-auto max-w-3xl">
-        <%!-- RE ENABLE THIS DIV WHEN ADVERTISING REVENUE LINK --%>
+          <%!-- RE ENABLE THIS DIV WHEN ADVERTISING REVENUE LINK --%>
           <%!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> --%>
-                    <div class="flex justify-center gap-6">
+          <div class="flex justify-center gap-6">
             <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
               <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                 <.icon name="hero-briefcase" class="size-7" />
@@ -369,7 +377,10 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
       </div>
       <ul class="space-y-3">
-        <li :for={item <- @items} class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+        <li
+          :for={item <- @items}
+          class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+        >
           <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
           <span>{item}</span>
         </li>

@@ -117,7 +117,7 @@ defmodule RevstackWeb.Router do
     scope "/admin" do
       pipe_through :browser
 
-      ash_admin "/"
+      ash_admin("/")
     end
   end
 end

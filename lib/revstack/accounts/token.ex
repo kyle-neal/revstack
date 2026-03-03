@@ -8,7 +8,7 @@ defmodule Revstack.Accounts.Token do
 
   postgres do
     table "tokens"
-    repo Revstack.Repo
+    repo(Revstack.Repo)
   end
 
   actions do

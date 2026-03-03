@@ -9,34 +9,34 @@ defmodule Revstack.Accounts.User do
   authentication do
     add_ons do
       log_out_everywhere do
-        apply_on_password_change? true
+        apply_on_password_change?(true)
       end
     end
 
     tokens do
-      enabled? true
-      token_resource Revstack.Accounts.Token
-      signing_secret Revstack.Secrets
-      store_all_tokens? true
-      require_token_presence_for_authentication? true
+      enabled?(true)
+      token_resource(Revstack.Accounts.Token)
+      signing_secret(Revstack.Secrets)
+      store_all_tokens?(true)
+      require_token_presence_for_authentication?(true)
     end
 
     strategies do
       magic_link do
-        identity_field :email
-        registration_enabled? true
-        require_interaction? true
+        identity_field(:email)
+        registration_enabled?(true)
+        require_interaction?(true)
 
-        sender Revstack.Accounts.User.Senders.SendMagicLinkEmail
+        sender(Revstack.Accounts.User.Senders.SendMagicLinkEmail)
       end
 
-      remember_me :remember_me
+      remember_me(:remember_me)
     end
   end
 
   postgres do
     table "users"
-    repo Revstack.Repo
+    repo(Revstack.Repo)
   end
 
   actions do

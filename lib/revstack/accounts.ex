@@ -2,7 +2,7 @@ defmodule Revstack.Accounts do
   use Ash.Domain, otp_app: :revstack, extensions: [AshAdmin.Domain]
 
   admin do
-    show? true
+    show?(true)
   end
 
   resources do
