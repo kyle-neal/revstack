@@ -264,15 +264,15 @@ defmodule RevstackWeb.WhoamiLive do
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <.project_card
-              title="Hardcore Handyman"
-              subtitle="Website built for a local handyman business"
+              title="Hardcore Handyman (Elixir / LiveView)"
+              subtitle="Designed and deployed a production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications to support a streamlined quoting workflow."
               href="https://hardcorehandyman.fly.dev/"
               icon="hero-wrench-screwdriver"
               preview_src={Map.get(@project_previews, "https://hardcorehandyman.fly.dev/")}
             />
             <.project_card
-              title="RevenueLink"
-              subtitle="My business website (Next.js)"
+              title="RevenueLink (Next.js)"
+              subtitle="My personal business website built with Next.js. Showcases my professional profile and portfolio, and serves as a hub for contacting me for any inquiries or collaborations."
               href="https://revenuelink.net/"
               icon="hero-building-office-2"
               preview_src={Map.get(@project_previews, "https://revenuelink.net/")}
