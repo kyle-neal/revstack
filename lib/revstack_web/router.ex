@@ -25,7 +25,8 @@ defmodule RevstackWeb.Router do
   scope "/", RevstackWeb do
     pipe_through :browser
 
-    live "/", HomeLive
+    # live "/", HomeLive
+    live "/", WhoamiLive
     live "/about", AboutLive
     live "/services", ServicesLive
     live "/estimate", EstimateLive
@@ -116,7 +117,7 @@ defmodule RevstackWeb.Router do
     scope "/admin" do
       pipe_through :browser
 
-      ash_admin "/"
+      ash_admin("/")
     end
   end
 end

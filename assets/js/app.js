@@ -37,6 +37,13 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
+// Scroll-to-top helper (used by header "Home" link)
+window.addEventListener("phx:scroll-top", _e => {
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
+  const behavior = prefersReducedMotion ? "auto" : "smooth"
+  window.scrollTo({top: 0, left: 0, behavior})
+})
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 

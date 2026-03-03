@@ -9,7 +9,7 @@ defmodule RevstackWeb.Layouts do
   # The default root.html.heex file contains the HTML
   # skeleton of your application, namely HTML headers
   # and other static content.
-  embed_templates "layouts/*"
+  embed_templates("layouts/*")
 
   @doc """
   Renders your app layout.
@@ -25,36 +25,48 @@ defmodule RevstackWeb.Layouts do
       </Layouts.app>
 
   """
-  attr :flash, :map, required: true, doc: "the map of flash messages"
+  attr(:flash, :map, required: true, doc: "the map of flash messages")
 
-  attr :current_scope, :map,
+  attr(:current_scope, :map,
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
+  )
 
-  slot :inner_block, required: true
+  slot(:inner_block, required: true)
 
   def app(assigns) do
     ~H"""
-    <header class="sticky top-0 z-40 border-b border-base-300 bg-base-100/80 backdrop-blur-lg">
+    <header
+      id="top"
+      class="sticky top-0 z-40 border-b border-base-300 bg-base-100/80 backdrop-blur-lg"
+    >
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <div class="flex items-center gap-1">
-          <a
+          <%!-- <a
             href="/"
             class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
           >
             RevenueLink Technologies
+          </a> --%>
+          <a
+            href="/"
+            class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
+          >
+            Kyle Neal | Distributed Systems Engineer
           </a>
         </div>
 
         <%!-- Desktop Nav --%>
         <div class="hidden md:flex items-center gap-1">
           <.link
+            id="nav-home"
             navigate="/"
+            phx-click-capture={JS.dispatch("phx:scroll-top")}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Home
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/about"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
@@ -65,25 +77,25 @@ defmodule RevstackWeb.Layouts do
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Services
-          </.link>
+          </.link> --%>
           <.link
             navigate="/contact"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Contact
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/whoami"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Kyle
           </.link>
-          <.link
+           <.link
             navigate="/estimate"
             class="ml-2 btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all"
           >
             Get an Estimate
-          </.link>
+          </.link> --%>
           <div class="ml-2">
             <.theme_toggle />
           </div>
@@ -103,12 +115,14 @@ defmodule RevstackWeb.Layouts do
       <div class="hidden peer-checked:block md:hidden border-t border-base-300 bg-base-100 px-4 pb-4 pt-2">
         <div class="flex flex-col gap-1">
           <.link
+            id="mobile-nav-home"
             navigate="/"
+            phx-click-capture={JS.dispatch("phx:scroll-top")}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Home
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/about"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
@@ -119,7 +133,7 @@ defmodule RevstackWeb.Layouts do
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Services
-          </.link>
+          </.link> --%>
           <.link
             navigate="/contact"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
@@ -173,8 +187,11 @@ defmodule RevstackWeb.Layouts do
               LinkedIn
             </a>
             <span class="text-base-content/20">|</span>
-            <a href="mailto:kyle@revenuelink.tech" class="hover:text-base-content transition-colors">
-              kyle@revenuelink.tech
+            <a
+              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              class="hover:text-base-content transition-colors"
+            >
+              kyle.neal.lucidsoftwaresolutions@gmail.com
             </a>
           </div>
         </div>
@@ -195,8 +212,8 @@ defmodule RevstackWeb.Layouts do
 
       <.flash_group flash={@flash} />
   """
-  attr :flash, :map, required: true, doc: "the map of flash messages"
-  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+  attr(:flash, :map, required: true, doc: "the map of flash messages")
+  attr(:id, :string, default: "flash-group", doc: "the optional id of flash container")
 
   def flash_group(assigns) do
     ~H"""

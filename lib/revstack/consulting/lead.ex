@@ -7,7 +7,7 @@ defmodule Revstack.Consulting.Lead do
 
   postgres do
     table "leads"
-    repo Revstack.Repo
+    repo(Revstack.Repo)
   end
 
   code_interface do

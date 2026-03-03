@@ -7,7 +7,7 @@ defmodule Revstack.Consulting.EstimateRequest do
 
   postgres do
     table "estimate_requests"
-    repo Revstack.Repo
+    repo(Revstack.Repo)
   end
 
   code_interface do
