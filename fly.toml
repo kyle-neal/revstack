@@ -4,7 +4,7 @@
 #
 
 app = "revstack"
-primary_region = "iad"
+primary_region = "dfw"
 kill_signal = "SIGTERM"
 kill_timeout = "5s"
 
