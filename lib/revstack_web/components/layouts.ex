@@ -39,11 +39,17 @@ defmodule RevstackWeb.Layouts do
     <header class="sticky top-0 z-40 border-b border-base-300 bg-base-100/80 backdrop-blur-lg">
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <div class="flex items-center gap-1">
-          <a
+          <%!-- <a
             href="/"
             class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
           >
             RevenueLink Technologies
+          </a> --%>
+                    <a
+            href="/"
+            class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
+          >
+            Kyle Neal | Distributed Systems Engineer
           </a>
         </div>
 
@@ -55,7 +61,7 @@ defmodule RevstackWeb.Layouts do
           >
             Home
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/about"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
@@ -66,25 +72,25 @@ defmodule RevstackWeb.Layouts do
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Services
-          </.link>
+          </.link> --%>
           <.link
             navigate="/contact"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Contact
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/whoami"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Kyle
           </.link>
-          <.link
+           <.link
             navigate="/estimate"
             class="ml-2 btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all"
           >
             Get an Estimate
-          </.link>
+          </.link> --%>
           <div class="ml-2">
             <.theme_toggle />
           </div>
@@ -109,7 +115,7 @@ defmodule RevstackWeb.Layouts do
           >
             Home
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/about"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
@@ -120,7 +126,7 @@ defmodule RevstackWeb.Layouts do
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Services
-          </.link>
+          </.link> --%>
           <.link
             navigate="/contact"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"

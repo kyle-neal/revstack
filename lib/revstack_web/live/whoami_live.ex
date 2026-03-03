@@ -38,12 +38,12 @@ defmodule RevstackWeb.WhoamiLive do
             >
               <.icon name="hero-envelope" class="size-5" /> Contact Me
             </.link>
-            <.link
+            <%!-- <.link
               navigate={~p"/"}
               class="btn btn-outline btn-lg gap-2 transition-all duration-300 hover:-translate-y-0.5"
             >
               <.icon name="hero-building-office-2" class="size-5" /> Visit RevenueLink Tech
-            </.link>
+            </.link> --%>
           </div>
           <%!-- Quick links --%>
           <div class="mt-6 flex items-center justify-center gap-6 text-sm text-base-content/50">
@@ -284,7 +284,9 @@ defmodule RevstackWeb.WhoamiLive do
       <%!-- Closing CTA --%>
       <section class="py-20 sm:py-28">
         <div class="mx-auto max-w-3xl">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <%!-- RE ENABLE THIS DIV WHEN ADVERTISING REVENUE LINK --%>
+          <%!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> --%>
+                    <div class="flex justify-center gap-6">
             <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
               <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                 <.icon name="hero-briefcase" class="size-7" />
@@ -295,7 +297,7 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-envelope" class="size-4" /> Contact Me
               </.link>
             </div>
-            <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+            <%!-- <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
               <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                 <.icon name="hero-rocket-launch" class="size-7" />
               </div>
@@ -306,7 +308,7 @@ defmodule RevstackWeb.WhoamiLive do
               <.link navigate={~p"/"} class="btn btn-primary gap-2">
                 <.icon name="hero-building-office-2" class="size-4" /> Visit RevenueLink Tech
               </.link>
-            </div>
+            </div> --%>
           </div>
         </div>
       </section>
