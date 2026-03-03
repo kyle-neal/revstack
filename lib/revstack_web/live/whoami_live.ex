@@ -398,7 +398,7 @@ defmodule RevstackWeb.WhoamiLive do
       <h3 class="font-bold text-base-content">{@degree}</h3>
       <p class="text-sm text-base-content/70 mt-1">{@school}</p>
       <p class="text-xs text-base-content/50 mt-1">{@period}</p>
-      <span class="inline-flex items-center rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning mt-3">
+      <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary mt-3">
         {@honors}
       </span>
     </div>
