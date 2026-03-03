@@ -170,7 +170,7 @@ defmodule RevstackWeb.Layouts do
             </.link>
             <span class="text-base-content/20">|</span>
             <a
-              href="https://github.com/kneal"
+              href="https://github.com/kyle-neal"
               target="_blank"
               rel="noopener noreferrer"
               class="hover:text-base-content transition-colors"
@@ -179,7 +179,7 @@ defmodule RevstackWeb.Layouts do
             </a>
             <span class="text-base-content/20">|</span>
             <a
-              href="https://linkedin.com/in/kneal"
+              href="https://www.linkedin.com/in/kyle-n-0bbb52a1/"
               target="_blank"
               rel="noopener noreferrer"
               class="hover:text-base-content transition-colors"
@@ -188,10 +188,10 @@ defmodule RevstackWeb.Layouts do
             </a>
             <span class="text-base-content/20">|</span>
             <a
-              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              href="mailto:nealkyle5@gmail.com"
               class="hover:text-base-content transition-colors"
             >
-              kyle.neal.lucidsoftwaresolutions@gmail.com
+              nealkyle5@gmail.com
             </a>
           </div>
         </div>

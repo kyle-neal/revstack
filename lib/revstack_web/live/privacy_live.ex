@@ -48,9 +48,9 @@ defmodule RevstackWeb.PrivacyLive do
                 <p class="text-base-content/80 leading-relaxed">
                   You may request deletion of your personal data at any time by contacting us
                   at <a
-                    href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+                    href="mailto:nealkyle5@gmail.com"
                     class="text-primary hover:underline"
-                  >kyle.neal.lucidsoftwaresolutions@gmail.com</a>.
+                  >nealkyle5@gmail.com</a>.
                   We will process your request within a reasonable timeframe.
                 </p>
               </div>
@@ -61,9 +61,9 @@ defmodule RevstackWeb.PrivacyLive do
                 <h2 class="text-xl font-bold text-base-content mb-3">Contact</h2>
                 <p class="text-base-content/80 leading-relaxed">
                   If you have any questions about this privacy policy, please contact us at <a
-                    href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+                    href="mailto:nealkyle5@gmail.com"
                     class="text-primary hover:underline"
-                  >kyle.neal.lucidsoftwaresolutions@gmail.com</a>.
+                  >nealkyle5@gmail.com</a>.
                 </p>
               </div>
             </div>
