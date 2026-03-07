@@ -1,17 +1,14 @@
 # Revstack
 
-A Phoenix LiveView website for RevenueLink Technologies LLC, featuring a services landing page and a recruiter-focused technical profile.
+A Phoenix LiveView technical profile website, currently serving as a high-end recruiter-facing showcase. Built for RevenueLink Technologies LLC and ready to serve as the company website when needed.
+
+**Live Site**: [https://revstack.fly.dev/](https://revstack.fly.dev/)
 
 ## Features
 
 ### Public Pages
-- **Home** (`/`) — Consulting landing page with hero, service overview, and CTAs
-- **About** (`/about`) — Company and founder information
-- **Services** (`/services`) — Detailed service offerings (Elixir, Phoenix, Erlang/OTP, architecture, infrastructure) with engagement models
-- **Contact** (`/contact`) — Lead capture form with validation
-- **Estimate** (`/estimate`) — Project estimate request form with project type / budget / timeline enums
-- **Kyle Neal Profile** (`/whoami`) — High-end recruiter-facing technical profile with expertise, leadership, and interests
-- **Privacy Policy** (`/privacy`) — Data collection and usage policy
+- **Home** (`/`) — High-end technical profile featuring expertise, leadership experience, and professional interests
+- Additional consulting pages (About, Services, Contact, Estimate, Privacy Policy) are implemented but currently hidden from navigation
 
 ### Admin Features
 - **Ash Admin** (`/admin`) — Admin dashboard for managing leads and estimate requests (magic link authentication)
@@ -34,7 +31,7 @@ Both models include honeypot anti-spam, email validation, and role-based authori
 ## Getting Started
 
 ### Prerequisites
-- Elixir ~> 1.15
+- Elixir ~> 1.19.5
 - PostgreSQL 16+
 
 ### Setup

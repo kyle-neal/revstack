@@ -49,7 +49,9 @@ defmodule RevstackWeb.Layouts do
             RevenueLink Technologies
           </a> --%>
           <a
-            href="/"
+            id="nav-brand"
+            href="#top"
+            data-scroll-top="true"
             class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
           >
             Kyle Neal | Distributed Systems Engineer
@@ -60,6 +62,7 @@ defmodule RevstackWeb.Layouts do
         <div class="hidden md:flex items-center gap-1">
           <.link
             id="nav-home"
+            data-scroll-top="true"
             navigate="/"
             phx-click-capture={JS.dispatch("phx:scroll-top")}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
@@ -116,6 +119,7 @@ defmodule RevstackWeb.Layouts do
         <div class="flex flex-col gap-1">
           <.link
             id="mobile-nav-home"
+            data-scroll-top="true"
             navigate="/"
             phx-click-capture={JS.dispatch("phx:scroll-top")}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
@@ -170,7 +174,7 @@ defmodule RevstackWeb.Layouts do
             </.link>
             <span class="text-base-content/20">|</span>
             <a
-              href="https://github.com/kneal"
+              href="https://github.com/kyle-neal"
               target="_blank"
               rel="noopener noreferrer"
               class="hover:text-base-content transition-colors"
@@ -179,7 +183,7 @@ defmodule RevstackWeb.Layouts do
             </a>
             <span class="text-base-content/20">|</span>
             <a
-              href="https://linkedin.com/in/kneal"
+              href="https://www.linkedin.com/in/kyle-n-0bbb52a1/"
               target="_blank"
               rel="noopener noreferrer"
               class="hover:text-base-content transition-colors"
@@ -188,10 +192,10 @@ defmodule RevstackWeb.Layouts do
             </a>
             <span class="text-base-content/20">|</span>
             <a
-              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              href="mailto:nealkyle5@gmail.com"
               class="hover:text-base-content transition-colors"
             >
-              kyle.neal.lucidsoftwaresolutions@gmail.com
+              nealkyle5@gmail.com
             </a>
           </div>
         </div>

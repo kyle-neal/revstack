@@ -1,14 +1,46 @@
 defmodule RevstackWeb.WhoamiLive do
   use RevstackWeb, :live_view
 
+  @project_urls [
+    "https://hardcorehandyman.fly.dev/",
+    "https://revenuelink.net/"
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok,
-     assign(socket,
-       page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
-       page_description:
-         "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership."
-     )}
+    socket =
+      assign(socket,
+        page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
+        page_description:
+          "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership.",
+        project_previews: %{}
+      )
+
+    socket =
+      if connected?(socket) do
+        send(self(), :load_project_previews)
+        socket
+      else
+        socket
+      end
+
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_info(:load_project_previews, socket) do
+    previews =
+      Enum.reduce(@project_urls, %{}, fn url, acc ->
+        case fetch_project_preview(url) do
+          preview_url when is_binary(preview_url) and preview_url != "" ->
+            Map.put(acc, url, preview_url)
+
+          _ ->
+            acc
+        end
+      end)
+
+    {:noreply, assign(socket, :project_previews, previews)}
   end
 
   @impl true
@@ -219,6 +251,36 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
       </section>
 
+      <%!-- Portfolio --%>
+      <section class="py-16 sm:py-20">
+        <div class="mx-auto max-w-5xl">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-base-content">Portfolio</h2>
+            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
+              A couple of live projects you can check out.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <.project_card
+              title="Hardcore Handyman (Elixir / LiveView)"
+              subtitle="Designed and deployed a production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications to support a streamlined quoting workflow."
+              href="https://hardcorehandyman.fly.dev/"
+              icon="hero-wrench-screwdriver"
+              preview_src={Map.get(@project_previews, "https://hardcorehandyman.fly.dev/")}
+            />
+            <.project_card
+              title="RevenueLink (Next.js)"
+              subtitle="My personal business website built with Next.js. Showcases my professional profile and portfolio, and serves as a hub for contacting me for any inquiries or collaborations."
+              href="https://revenuelink.net/"
+              icon="hero-building-office-2"
+              preview_src={Map.get(@project_previews, "https://revenuelink.net/")}
+            />
+          </div>
+        </div>
+      </section>
+
       <%!-- Education --%>
       <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
         <div class="mx-auto max-w-4xl">
@@ -242,6 +304,37 @@ defmodule RevstackWeb.WhoamiLive do
           </div>
         </div>
       </section>
+
+      <%!-- Photos (placeholders) --%>
+      <%!-- <section class="py-16 sm:py-20">
+        <div class="mx-auto max-w-5xl">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-base-content">Photos</h2>
+            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
+              Empty slots you can wire up to images of your choice.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <.image_placeholder
+              id="photo-professional"
+              title="Professional photo"
+              hint="Replace with a headshot (e.g. /images/me.jpg)"
+            />
+            <.image_placeholder
+              id="photo-hobby"
+              title="Hobby photo"
+              hint="Replace with something personal (guitar, biking, etc.)"
+            />
+            <.image_placeholder
+              id="photo-extra"
+              title="Extra photo"
+              hint="Optional: another shot (talk, meetup, outdoors)"
+            />
+          </div>
+        </div>
+      </section> --%>
 
       <%!-- Leadership --%>
       <section class="py-16 sm:py-20">
@@ -322,6 +415,70 @@ defmodule RevstackWeb.WhoamiLive do
       </section>
     </Layouts.app>
     """
+  end
+
+  defp project_card(assigns) do
+    assigns =
+      assigns
+      |> assign_new(:preview_src, fn ->
+        nil
+      end)
+      |> assign_new(:preview_alt, fn ->
+        "#{assigns.title} website preview"
+      end)
+
+    ~H"""
+    <a
+      href={@href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group block rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200"
+    >
+      <div class="mb-5 overflow-hidden rounded-xl border border-base-300 bg-base-200/40 aspect-video">
+        <%= if @preview_src do %>
+          <img
+            src={@preview_src}
+            alt={@preview_alt}
+            loading="lazy"
+            class="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
+          />
+        <% else %>
+          <div class="flex h-full w-full items-center justify-center text-base-content/40">
+            <.icon name="hero-photo" class="size-8" />
+          </div>
+        <% end %>
+      </div>
+
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h3 class="text-lg font-bold text-base-content group-hover:text-primary transition-colors">
+            {@title}
+          </h3>
+          <p class="mt-1 text-sm text-base-content/70 leading-relaxed">{@subtitle}</p>
+          <p class="mt-4 text-sm text-primary font-medium break-all">{@href}</p>
+        </div>
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+          <.icon name={@icon} class="size-6" />
+        </div>
+      </div>
+    </a>
+    """
+  end
+
+  defp fetch_project_preview(url) do
+    response =
+      Req.get!("https://api.microlink.io/",
+        params: [
+          url: url,
+          screenshot: true,
+          meta: false,
+          palette: false
+        ]
+      )
+
+    get_in(response.body, ["data", "screenshot", "url"])
+  rescue
+    _ -> nil
   end
 
   defp stat_card(assigns) do

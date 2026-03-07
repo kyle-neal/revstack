@@ -35,11 +35,50 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
-// Scroll-to-top helper (used by header "Home" link)
-window.addEventListener("phx:scroll-top", _e => {
+let scrollTopPending = false
+
+function scrollToTop() {
   const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
   const behavior = prefersReducedMotion ? "auto" : "smooth"
+  const scrollingElement = document.scrollingElement
+
+  if (scrollingElement && typeof scrollingElement.scrollTo === "function") {
+    scrollingElement.scrollTo({top: 0, left: 0, behavior})
+  }
+
+  // Fallback for browsers/layouts where window is the scroll container
   window.scrollTo({top: 0, left: 0, behavior})
+}
+
+// Ensure scroll-to-top still runs even when LiveView intercepts link clicks
+// (e.g. data-phx-link navigation can short-circuit element-level JS).
+document.addEventListener(
+  "click",
+  e => {
+    if (!(e.target instanceof Element)) return
+    const target = e.target.closest("[data-scroll-top]")
+    if (!target) return
+
+    scrollTopPending = true
+    requestAnimationFrame(() => scrollToTop())
+  },
+  true
+)
+
+// Scroll-to-top helper (used by header "Home" link)
+window.addEventListener("phx:scroll-top", _e => {
+  scrollTopPending = true
+  // Scroll immediately for same-page clicks...
+  requestAnimationFrame(() => scrollToTop())
+})
+
+// ...and also after LiveView navigation completes,
+// because LV can restore previous scroll position.
+window.addEventListener("phx:page-loading-stop", _info => {
+  if (scrollTopPending) {
+    scrollTopPending = false
+    requestAnimationFrame(() => scrollToTop())
+  }
 })
 
 // connect if there are any LiveViews on the page
