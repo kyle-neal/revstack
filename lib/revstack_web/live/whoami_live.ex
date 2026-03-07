@@ -13,7 +13,11 @@ defmodule RevstackWeb.WhoamiLive do
         page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
         page_description:
           "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership.",
-        project_previews: %{}
+        project_previews: %{},
+        career_modal_open?: false,
+        career_selected_project_id: nil,
+        career_detail_view?: false,
+        career_phases: [career_portfolio_phase_one()]
       )
 
     socket =
@@ -41,6 +45,41 @@ defmodule RevstackWeb.WhoamiLive do
       end)
 
     {:noreply, assign(socket, :project_previews, previews)}
+  end
+
+  @impl true
+  def handle_event("open_career_modal", %{"project-id" => project_id}, socket) do
+    {:noreply,
+     assign(socket,
+       career_modal_open?: true,
+       career_selected_project_id: project_id,
+       career_detail_view?: false
+     )}
+  end
+
+  def handle_event("close_career_modal", _params, socket) do
+    {:noreply,
+     assign(socket,
+       career_modal_open?: false,
+       career_selected_project_id: nil,
+       career_detail_view?: false
+     )}
+  end
+
+  def handle_event("select_career_project", %{"project-id" => project_id}, socket) do
+    {:noreply,
+     assign(socket,
+       career_selected_project_id: project_id,
+       career_detail_view?: false
+     )}
+  end
+
+  def handle_event("view_career_detail", _params, socket) do
+    {:noreply, assign(socket, career_detail_view?: true)}
+  end
+
+  def handle_event("back_career_overview", _params, socket) do
+    {:noreply, assign(socket, career_detail_view?: false)}
   end
 
   @impl true
@@ -251,11 +290,35 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
       </section>
 
-      <%!-- Portfolio --%>
+      <%!-- Career Portfolio --%>
       <section class="py-16 sm:py-20">
         <div class="mx-auto max-w-5xl">
           <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Portfolio</h2>
+            <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
+            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
+              Selected professional systems from across my career 💰 <b>click any project for the full story</b>.
+            </p>
+          </div>
+          <%= for phase <- @career_phases do %>
+            <.career_phase_section phase={phase} />
+          <% end %>
+        </div>
+      </section>
+
+      <%!-- Career Portfolio Modal --%>
+      <.career_portfolio_modal
+        :if={@career_modal_open?}
+        phases={@career_phases}
+        selected_project_id={@career_selected_project_id}
+        detail_view?={@career_detail_view?}
+      />
+
+      <%!-- Live Projects --%>
+      <section class="py-16 sm:py-20">
+        <div class="mx-auto max-w-5xl">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-base-content">Live Projects</h2>
             <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
             <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
               A couple of live projects you can check out.
@@ -580,5 +643,678 @@ defmodule RevstackWeb.WhoamiLive do
       <span class="text-sm font-medium text-base-content">{@label}</span>
     </div>
     """
+  end
+
+  # ---------------------------------------------------------------------------
+  # Career Portfolio Components
+  # ---------------------------------------------------------------------------
+
+  defp career_phase_section(assigns) do
+    ~H"""
+    <div class="mb-12 last:mb-0">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+          <.icon name="hero-folder-open" class="size-4" />
+        </div>
+        <h3 class="text-base font-bold text-primary">{@phase.title}</h3>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <.career_project_card :for={project <- @phase.projects} project={project} />
+      </div>
+    </div>
+    """
+  end
+
+  defp career_project_card(assigns) do
+    ~H"""
+    <button
+      phx-click="open_career_modal"
+      phx-value-project-id={@project.id}
+      class="group text-left rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer w-full"
+    >
+      <div class="flex items-center gap-3 mb-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+          <.icon name={@project.icon} class="size-5" />
+        </div>
+        <div class="min-w-0">
+          <h4 class="font-bold text-base-content group-hover:text-primary transition-colors truncate">
+            {@project.title}
+          </h4>
+          <p class="text-xs text-base-content/50">{@project.period_label}</p>
+        </div>
+      </div>
+      <p class="text-xs text-base-content/60 mb-3 line-clamp-2">{@project.tagline}</p>
+      <div class="flex flex-wrap gap-1.5 mb-3">
+        <.tech_badge :for={tech <- Enum.take(@project.tech_used, 3)} label={tech} />
+      </div>
+      <p class="text-sm text-base-content/70 leading-relaxed line-clamp-2">{@project.card_copy}</p>
+    </button>
+    """
+  end
+
+  defp tech_badge(assigns) do
+    ~H"""
+    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+      {@label}
+    </span>
+    """
+  end
+
+  defp career_portfolio_modal(assigns) do
+    phase = find_career_phase(assigns.phases, assigns.selected_project_id)
+    project = find_career_project(assigns.phases, assigns.selected_project_id)
+    assigns = assign(assigns, selected_phase: phase, selected_project: project)
+
+    ~H"""
+    <div
+      id="career-portfolio-modal"
+      class="fixed inset-0 z-50 overflow-y-auto"
+      phx-window-keydown="close_career_modal"
+      phx-key="Escape"
+    >
+      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div class="relative flex min-h-full items-start justify-center p-4 sm:p-6 lg:p-8">
+        <div class="relative w-full max-w-4xl my-8 rounded-2xl border border-base-300 bg-base-100 shadow-2xl">
+          <%!-- Header --%>
+          <div class="sticky top-0 z-10 flex items-center justify-between gap-4 rounded-t-2xl border-b border-base-300 bg-base-100 px-6 py-4">
+            <div class="flex items-center gap-3 min-w-0">
+              <button
+                :if={@detail_view?}
+                phx-click="back_career_overview"
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg hover:bg-base-200 transition-colors"
+                aria-label="Back to overview"
+              >
+                <.icon name="hero-arrow-left" class="size-4" />
+              </button>
+              <div class="min-w-0">
+                <h3 class="font-bold text-base-content truncate">
+                  <%= if @detail_view? do %>
+                    {@selected_project.title}
+                  <% else %>
+                    {@selected_phase.title}
+                  <% end %>
+                </h3>
+                <p :if={!@detail_view?} class="text-xs text-base-content/50">
+                  Select a project to explore
+                </p>
+              </div>
+            </div>
+            <button
+              phx-click="close_career_modal"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg hover:bg-base-200 transition-colors"
+              aria-label="Close modal"
+            >
+              <.icon name="hero-x-mark" class="size-5" />
+            </button>
+          </div>
+
+          <%!-- Body --%>
+          <div class="p-6 max-h-[70vh] overflow-y-auto">
+            <%= if @detail_view? && @selected_project do %>
+              <.career_project_detail project={@selected_project} />
+            <% else %>
+              <div class="space-y-0">
+                <%= for {project, idx} <- Enum.with_index(@selected_phase.projects) do %>
+                  <.career_timeline_item
+                    project={project}
+                    selected?={project.id == @selected_project_id}
+                    last?={idx == length(@selected_phase.projects) - 1}
+                  />
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp career_timeline_item(assigns) do
+    ~H"""
+    <div class="flex gap-4">
+      <%!-- Timeline line + dot --%>
+      <div class="flex flex-col items-center">
+        <div class={[
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+          if(@selected?,
+            do: "border-primary bg-primary text-white",
+            else: "border-base-300 bg-base-100 text-base-content/40"
+          )
+        ]}>
+          <.icon name={@project.icon} class="size-4" />
+        </div>
+        <div :if={!@last?} class="w-0.5 flex-1 bg-base-300 my-1"></div>
+      </div>
+
+      <%!-- Content --%>
+      <div
+        class={[
+          "flex-1 rounded-xl border p-4 mb-2 transition-all duration-200 cursor-pointer",
+          if(@selected?,
+            do: "border-primary/30 bg-primary/5 shadow-sm",
+            else: "border-transparent hover:border-base-300 hover:bg-base-200/30"
+          )
+        ]}
+        phx-click="select_career_project"
+        phx-value-project-id={@project.id}
+        role="button"
+        tabindex="0"
+      >
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <h4 class={[
+            "font-bold transition-colors",
+            if(@selected?, do: "text-primary", else: "text-base-content")
+          ]}>
+            {@project.title}
+          </h4>
+          <span class="text-xs text-base-content/50 shrink-0">{@project.period_label}</span>
+        </div>
+        <p class="text-sm text-base-content/70 mb-2">{@project.tagline}</p>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+          <.tech_badge :for={tech <- Enum.take(@project.tech_used, 4)} label={tech} />
+        </div>
+        <%= if @selected? do %>
+          <p class="text-sm text-base-content/80 leading-relaxed mt-3 mb-3">{@project.summary}</p>
+          <button
+            phx-click="view_career_detail"
+            class="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+          >
+            View full details <.icon name="hero-arrow-right" class="size-4" />
+          </button>
+        <% end %>
+      </div>
+    </div>
+    """
+  end
+
+  defp career_project_detail(assigns) do
+    ~H"""
+    <div class="space-y-8">
+      <%!-- Overview --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Overview</h4>
+        <p class="text-sm text-base-content/80 leading-relaxed">{@project.summary}</p>
+      </div>
+
+      <%!-- Tech Used --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Tech Used</h4>
+        <div class="flex flex-wrap gap-2">
+          <.tech_badge :for={tech <- @project.tech_used} label={tech} />
+        </div>
+      </div>
+
+      <%!-- How I Designed It --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">How I Designed It</h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- @project.design}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-check-circle" class="size-4 text-primary shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
+      <%!-- Challenges Encountered --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
+          Challenges Encountered
+        </h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- @project.challenges}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-exclamation-triangle" class="size-4 text-amber-500 shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
+      <%!-- Subsystems --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Subsystems</h4>
+        <div class="flex flex-wrap gap-2">
+          <span
+            :for={item <- @project.subsystems}
+            class="inline-flex items-center rounded-lg bg-base-200 px-3 py-1.5 text-xs font-medium text-base-content/70"
+          >
+            {item}
+          </span>
+        </div>
+      </div>
+
+      <%!-- Time to Production --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
+          Time to Production
+        </h4>
+        <p class="text-sm text-base-content/80">{@project.time_to_production}</p>
+      </div>
+
+      <%!-- Post-Production Lessons --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
+          Post-Production Lessons
+        </h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- @project.post_production_issues}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-light-bulb" class="size-4 text-primary shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
+      <%!-- Installation & Deployment --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
+          Installation & Deployment
+        </h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- @project.installation_or_deployment}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-rocket-launch" class="size-4 text-primary shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
+      <%!-- Business Impact --%>
+      <div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Business Impact</h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- @project.business_impact}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-arrow-trending-up" class="size-4 text-success shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    """
+  end
+
+  # ---------------------------------------------------------------------------
+  # Career Portfolio Data
+  # ---------------------------------------------------------------------------
+
+  defp find_career_project(phases, project_id) do
+    Enum.find_value(phases, fn phase ->
+      Enum.find(phase.projects, &(&1.id == project_id))
+    end)
+  end
+
+  defp find_career_phase(phases, project_id) do
+    Enum.find(phases, fn phase ->
+      Enum.any?(phase.projects, &(&1.id == project_id))
+    end)
+  end
+
+  defp career_portfolio_phase_one do
+    %{
+      id: "phase-1",
+      title: "Data Verification & Email Infrastructure Foundations",
+      overview:
+        "Building customer-facing tooling, custom DNS services, distributed proxy infrastructure, monitoring systems, and operational automation for large-scale email verification and sending infrastructure.",
+      projects: [
+        %{
+          id: "csv-repair",
+          title: "CSV Repair",
+          tagline:
+            "Cross-platform CSV repair and normalization utility for massive data verification files",
+          period_label: "Early Infrastructure",
+          phase: 1,
+          icon: "hero-document-text",
+          card_copy:
+            "Built a cross-platform CSV repair tool in C++/Qt that streamed huge malformed files, repaired rows where possible, and reduced customer costs before data verification.",
+          summary:
+            "A customer-facing desktop utility built in C++ and Qt to repair malformed CSV files before upload to a data verification platform. It fixed broken quoting, invalid rows, encoding-related failures, split oversized files, and reduced customer charges by removing bad rows before verification.",
+          tech_used: [
+            "C++",
+            "Qt",
+            "Desktop UI",
+            "Custom CSV Parsing",
+            "Multithreaded Worker Pools",
+            "Binary File IO"
+          ],
+          design: [
+            "Built as a local streaming pipeline rather than loading files fully into memory",
+            "Used incremental row parsing with resume offsets",
+            "Implemented a custom CSV parser that understood multiline quoted fields",
+            "Added passive mode for automatic discards and active mode for manual correction",
+            "Designed progress tracking and completion summaries for usability"
+          ],
+          challenges: [
+            "Malformed CSV quoting",
+            "Unicode / UTF-8 edge cases",
+            "Large file performance",
+            "Memory management and leak debugging",
+            "Files ranging from 1 GB to multi-terabyte scale"
+          ],
+          subsystems: [
+            "Row streaming parser",
+            "CSV repair engine",
+            "Active/passive correction workflow",
+            "Discard file output",
+            "Progress tracking",
+            "Version detection / upgrade prompt",
+            "Portable cross-platform distribution"
+          ],
+          time_to_production: "~6 months",
+          post_production_issues: [
+            "Encoding edge cases remained one of the hardest real-world problems",
+            "Some malformed rows were unsalvageable and had to be safely discarded",
+            "Memory leaks had to be hunted down through debugging and algorithm refinement"
+          ],
+          installation_or_deployment: [
+            "Distributed as portable builds for Windows, Mac, and Linux",
+            "Downloadable from the company site",
+            "Mac version required signed binaries"
+          ],
+          business_impact: [
+            "Used by thousands of customers",
+            "Reduced bad row charges",
+            "Reduced ingestion failures",
+            "Still in use today"
+          ],
+          timeline_order: 1
+        },
+        %{
+          id: "infrastructure-dns",
+          title: "Infrastructure DNS",
+          tagline:
+            "Custom authoritative DNS platform for routing traffic across email verification infrastructure",
+          period_label: "Infrastructure Scaling",
+          phase: 1,
+          icon: "hero-globe-alt",
+          card_copy:
+            "Built an Erlang authoritative DNS server that dynamically rerouted infrastructure based on MTA-detected health, protecting IP reputation across a large server fleet.",
+          summary:
+            "A full authoritative DNS server written in Erlang to serve infrastructure domains and dynamically redirect traffic based on infrastructure health. It supported multiple DNS record types, reverse DNS controls, runtime updates, query throttling, and large backend pools.",
+          tech_used: [
+            "Erlang/OTP",
+            "UDP/TCP DNS",
+            "Worker Pools",
+            "RabbitMQ",
+            "CIDR Filtering",
+            "Flat-file Persistence"
+          ],
+          design: [
+            "Separated control plane and data plane responsibilities",
+            "Core MTA detected unhealthy infrastructure and pushed DNS updates",
+            "Stayed focused on fast authoritative query serving",
+            "Built listener processes, protocol handlers, rDNS filtering, and throttling"
+          ],
+          challenges: [
+            "Provider blocking",
+            "SMTP failures at VPS/provider level",
+            "Reputation management",
+            "Keeping DNS updates correct under live traffic",
+            "Query flood / abuse protection"
+          ],
+          subsystems: [
+            "Authoritative DNS packet parsing / serialization",
+            "UDP/TCP listeners",
+            "Query throttling",
+            "rDNS firewall",
+            "Runtime update flow",
+            "Domain rotation support"
+          ],
+          time_to_production: "Built and evolved during early infrastructure scaling",
+          post_production_issues: [
+            "Records needed to be updated dynamically when servers were marked unhealthy",
+            "Domain rotation experiments were used to reduce blacklist and overuse risk"
+          ],
+          installation_or_deployment: [
+            "Deployed as independent Erlang DNS nodes",
+            "Served 50–500 backend servers depending on operational scale"
+          ],
+          business_impact: [
+            "Improved availability and protected infrastructure",
+            "Supported performance and reputation goals",
+            "Handled hundreds to thousands of DNS queries per second at peak"
+          ],
+          timeline_order: 2
+        },
+        %{
+          id: "edge-proxy",
+          title: "Edge Proxy",
+          tagline:
+            "Distributed Erlang proxy node for SMTP, HTTP/HTTPS, and DNS on disposable global VPS infrastructure",
+          period_label: "Infrastructure Scaling",
+          phase: 1,
+          icon: "hero-server-stack",
+          card_copy:
+            "Built a distributed Erlang proxy platform on disposable VPS nodes worldwide to shield core infrastructure while handling high-concurrency SMTP, HTTP/HTTPS, and DNS traffic.",
+          summary:
+            "A multi-protocol proxy system deployed on VPS nodes around the world so disposable infrastructure could act publicly while protecting core IP ranges. It proxied SMTP, HTTP/HTTPS, and DNS traffic and dynamically pulled configuration from the core MTA.",
+          tech_used: [
+            "Erlang/OTP",
+            "Ranch",
+            "Cowboy",
+            "Mnesia",
+            "Supervisor Trees",
+            "Systemd"
+          ],
+          design: [
+            "Disposable VPS nodes acted as the public-facing infrastructure layer",
+            "Core MTA remained protected behind them",
+            "Nodes bootstrapped by pulling config from core over HTTP",
+            "Protocol-specific handlers were separated cleanly",
+            "Connection-level relay design preserved performance and transparency"
+          ],
+          challenges: [
+            "Provider response behavior changed constantly",
+            "Centralizing logs for fast iteration",
+            "Scaling node count when VPS supply was limited",
+            "Protocol-specific edge cases in SMTP DATA handling and bind-IP routing"
+          ],
+          subsystems: [
+            "SMTP inbound relay",
+            "SMTP outbound relay",
+            "HTTP/HTTPS proxying",
+            "DNS support",
+            "Config bootstrap / refresh FSM",
+            "Firewall / IP filtering",
+            "Certificate handling",
+            "Status checks"
+          ],
+          time_to_production: "MVP in ~1 month; 2–3 more months to stable production",
+          post_production_issues: [
+            "Provider-side behavior drift required ongoing tuning",
+            "Operational visibility mattered more than theoretical elegance",
+            "Stable monitoring and config refresh were critical"
+          ],
+          installation_or_deployment: [
+            "Initially installed by bash scripts, later converted to Ansible-based provisioning",
+            "Fleet size commonly ranged from 50–500 nodes",
+            "Each node could handle thousands of simultaneous connections"
+          ],
+          business_impact: [
+            "Protected core IP ranges",
+            "Scaled verification and sending operations",
+            "Allowed disposable replacement of blocked nodes",
+            "Still actively used today"
+          ],
+          timeline_order: 3
+        },
+        %{
+          id: "infrastructure-monitoring",
+          title: "Infrastructure Monitoring",
+          tagline:
+            "Distributed Erlang monitoring system for node health, DNS integrity, and IP/domain reputation",
+          period_label: "Operational Maturity",
+          phase: 1,
+          icon: "hero-bell-alert",
+          card_copy:
+            "Built a distributed Erlang monitoring system that ran thousands of scheduled health and reputation checks across a large VPS fleet to preserve uptime and IP quality.",
+          summary:
+            "A master/slave Erlang monitoring system that continuously ran health and reputation checks across the proxy fleet, collected results through AMQP, and alerted admins when nodes should be replaced or removed from rotation.",
+          tech_used: [
+            "Erlang/OTP",
+            "AMQP",
+            "Mnesia",
+            "Poolboy",
+            "HTTP Workers",
+            "Master/Slave Architecture"
+          ],
+          design: [
+            "Master/slave layout",
+            "Monitor lifecycle driven by infrastructure events from the MTA",
+            "One monitor per active domain/target with per-check workers",
+            "Slot-based scheduling with jitter to avoid thundering herd behavior",
+            "Expected-value validation instead of simplistic up/down checks"
+          ],
+          challenges: [
+            "Scaling periodic monitoring across the full fleet",
+            "Balancing responsiveness with controlled concurrency",
+            "Validating DNS/reputation results without noisy false positives"
+          ],
+          subsystems: [
+            "Monitor supervisor",
+            "Per-check workers",
+            "AMQP config/result flow",
+            "Slot scheduler",
+            "HTTP, SMTP, DNS, rDNS, RBL, DBL, sender score, Google threat, version checks"
+          ],
+          time_to_production: "Built and evolved alongside the monitoring fleet",
+          post_production_issues: [
+            "Minimal instability — stable and low-maintenance from early on",
+            "Emphasis shifted toward pragmatic health signals rather than overly heavy metrics"
+          ],
+          installation_or_deployment: [
+            "Core node plus slave nodes",
+            "Monitor creation triggered automatically when proxy config changed",
+            "Effective scale reached ~5,000 periodic checks across 500 nodes × ~10 check types"
+          ],
+          business_impact: [
+            "Centralized visibility across the entire fleet",
+            "Alerted admins for node replacement, IP rotation, DNS updates, and traffic pausing",
+            "Foundational operational tool for infrastructure reliability"
+          ],
+          timeline_order: 4
+        },
+        %{
+          id: "ip-provisioning",
+          title: "IP Provisioning",
+          tagline:
+            "Postgres-driven IP range onboarding and DNS allocation workflow for email infrastructure growth",
+          period_label: "Operational Maturity",
+          phase: 1,
+          icon: "hero-squares-plus",
+          card_copy:
+            "Automated IP range onboarding in Postgres, turning newly purchased CIDR blocks into production-ready DNS, rDNS, and delivery-node allocations.",
+          summary:
+            "Built Postgres-backed automation to ingest newly purchased IP ranges and fully wire them into the sending infrastructure, including IP expansion, DNS/rDNS generation, node config updates, and static allocation to delivery nodes.",
+          tech_used: [
+            "PostgreSQL",
+            "CIDR/IP Modeling",
+            "CLI Workflows",
+            "Core MTA Integration"
+          ],
+          design: [
+            "Used Postgres as the source of truth for the IP pool",
+            "Represented ranges as CIDR-backed iprange records",
+            "Generated individual ipresource rows for usable IPs",
+            "Automated DNS, rDNS, and node config relationships",
+            "Supported deterministic static assignment by delivery node"
+          ],
+          challenges: [
+            "Sourcing high-quality IP ranges for target provider ecosystems",
+            "Managing large range ingestions accurately",
+            "Preventing overlap and duplicate allocations",
+            "Warming new ranges safely to avoid immediate provider blocks"
+          ],
+          subsystems: [
+            "iprange ingestion",
+            "ipresource expansion",
+            "Forward DNS generation",
+            "rDNS mapping",
+            "Config relationships for delivery nodes → edge proxies",
+            "Static allocation model",
+            "Warm-up / validation workflow"
+          ],
+          time_to_production: "Built as part of ongoing infrastructure scaling",
+          post_production_issues: [
+            "New ranges needed careful validation and gradual warm-up",
+            "Reputation and provider acceptance mattered more than raw address count"
+          ],
+          installation_or_deployment: [
+            "Invoked manually through CLI",
+            "Edge proxy nodes later pulled resulting config from core over HTTP",
+            "Typical purchases were /22 ranges split into /24 blocks"
+          ],
+          business_impact: [
+            "Accelerated infrastructure growth",
+            "Reduced manual configuration work",
+            "Made large-scale IP onboarding operationally feasible"
+          ],
+          timeline_order: 5
+        },
+        %{
+          id: "mx-dns",
+          title: "MX DNS",
+          tagline: "Specialized Erlang DNS appliance optimized for MX-focused provider workflows",
+          period_label: "Operational Maturity",
+          phase: 1,
+          icon: "hero-signal",
+          card_copy:
+            "Built a focused Erlang DNS service for MX provisioning workflows, optimized for quick updates, bounded concurrency, and safer handling under UDP abuse.",
+          summary:
+            "A narrower, operationally simpler authoritative DNS service built specifically for MX-centric provisioning workflows where fast updates, clean NS/MX behavior, and abuse resistance mattered more than broad DNS feature coverage.",
+          tech_used: [
+            "Erlang/OTP",
+            "Poolboy",
+            "Mnesia",
+            "UDP DNS",
+            "Rate Limiting",
+            "Worker Pools"
+          ],
+          design: [
+            "Intentionally narrower than the infrastructure DNS",
+            "Optimized for operational simplicity and quick MX updates",
+            "Authoritative for configured in-zone requests",
+            "Refused out-of-zone/disallowed paths",
+            "Used pooled workers and in-memory persistence for fast handling"
+          ],
+          challenges: [
+            "Keeping live DNS behavior correct during dynamic add/remove updates",
+            "Staying resilient against UDP abuse and amplification-style traffic"
+          ],
+          subsystems: [
+            "UDP listener",
+            "Zone-limited authoritative responder",
+            "MX/A/NS/SOA response generation",
+            "Query throttling",
+            "Mnesia-backed config storage",
+            "Worker pool concurrency"
+          ],
+          time_to_production: "Built alongside evolving provider workflows",
+          post_production_issues: [
+            "Correctness under live config mutation was the core concern",
+            "Focused tools can be better than broad platforms for specialized operational workflows"
+          ],
+          installation_or_deployment: [
+            "Deployed as an Erlang DNS service specialized for MX/provider setup flows"
+          ],
+          business_impact: [
+            "Simplified operational workflows for MX/rDNS provisioning",
+            "Gave the team a focused DNS appliance for a specific infrastructure need"
+          ],
+          timeline_order: 6
+        }
+      ]
+    }
   end
 end
